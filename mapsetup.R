@@ -70,8 +70,10 @@ kon<-subset(kon,select=c("NUTS_ID","Instr"))
 #join
 konvergenz<-join(nuts2.df,kon,by="NUTS_ID",type="left")
 
-
+#add field nuts0 containing the first two letters of NUTS_ID
 konvergenz$nuts0<-substr(as.character(konvergenz$NUTS_ID),0,2)
+
+#change all other countries manually
 konvergenz$Konvergenz[konvergenz$nuts0=="PL"]<-1
 konvergenz$Konvergenz[konvergenz$nuts0=="SI"]<-1
 konvergenz$Konvergenz[konvergenz$nuts0=="EE"]<-1
@@ -134,3 +136,5 @@ ggplot(konvergenz) +
   scale_x_continuous(name="",breaks=NULL)+
   scale_y_continuous(name="",breaks=NULL)+
   theme(panel.grid.minor=element_blank(), panel.grid.major=element_blank())
+
+
