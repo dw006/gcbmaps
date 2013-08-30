@@ -125,11 +125,24 @@ ggplot(nasa)+
 ggplot(citiesn)+
   geom_bar(aes(x = factor(yearc), y = number), stat = "identity")
 
+ggplot(citiesn)+
+  geom_point(aes(x = factor(yearc), y = number))
+
 # now bar chart for each city, located on specific coordinates
 # see also: http://stackoverflow.com/questions/16028659/plots-on-a-map-using-ggplot2
+# see ?geom_subplot
+# geom_subplot2d is only for regular grids subplot takes lon/lat and group and plots
+
+##play around with width and size, maybe something is wrong in cut (see above) as warnings() gives an error with "non-overlapping x intervals"
 ggplot(citiesn)+
-  geom_subplot2d(aes(lon, lat, group = city, subplot = geom_bar(aes(x = factor(yearc), y = number, stat = "identity"), size = 100, ref = NULL)))+
+  geom_subplot(aes(lon, lat, group = city, subplot = geom_bar(aes(x = factor(yearc), y = number), width = 10, height = 10, reference = NULL, stat = "identity")))+
   coord_map(project = "lambert", lat0 = 0,lon0 = 10, ylim = c(46, 56),xlim = c(5, 15))
 
+
+## with a small number of cities it works perfectly
+test <- head(citiesn, 30)
+ggplot(test)+
+  geom_subplot(aes(lon, lat, group = city, subplot = geom_bar(aes(x = factor(yearc), y = number), reference = NULL, stat = "identity")))+
+  coord_map(project = "lambert", lat0 = 0,lon0 = 10, ylim = c(46, 56),xlim = c(5, 15))
 
 
