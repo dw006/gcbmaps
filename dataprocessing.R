@@ -1,44 +1,18 @@
+###################################################################
+############### Data Processing for subplots ######################
+###################################################################
+
 library(xlsx)
 library(ggmap)
 library(plyr)
 
-
-####ICCA Database
-#Automotive in Germany
-subject <- c("Technology/Engineering/Automobiles", "Transport & Communication/Road", "Transport & Communication/Road/Cars & Trucks", "Transport & Communication/Road/Vehicles")
-country <- c("Austria/Germany", "Belgium/Germany", "Belgium/Germany/Netherlands", "Czech Republic/Germany/United Arab Emirates", "France/Germany", "France/Germany/Switzerland", "Germany", "Germany/Lithuania/Poland", "Germany/Luxembourg", "Germany/Netherlands", "Germany/Norway", "Germany/Poland", "Germany/Russia", "Germany/Sweden", "Germany/Switzerland", "Germany/United Kingdom")
-result_auto <- "automotive.xls"
-
-#Technology in Germany
-#1
-subject1 <- c("Technology")
-country1 <- c("Austria/Germany", "Belgium/Germany", "Belgium/Germany/Netherlands", "Czech Republic/Germany/United Arab Emirates", "France/Germany", "France/Germany/Switzerland", "Germany", "Germany/Lithuania/Poland", "Germany/Luxembourg", "Germany/Netherlands", "Germany/Norway", "Germany/Poland", "Germany/Russia", "Germany/Sweden", "Germany/Switzerland", "Germany/United Kingdom")
+#data files
 result_techno1 <- "techno95.xls"
-calender_before1 <-"01 Jan 1995"
-
-#2
-subject2 <- c("Technology")
-country2 <- c("Austria/Germany", "Belgium/Germany", "Belgium/Germany/Netherlands", "Czech Republic/Germany/United Arab Emirates", "France/Germany", "France/Germany/Switzerland", "Germany", "Germany/Lithuania/Poland", "Germany/Luxembourg", "Germany/Netherlands", "Germany/Norway", "Germany/Poland", "Germany/Russia", "Germany/Sweden", "Germany/Switzerland", "Germany/United Kingdom")
 result_techno2 <- "techno04.xls"
-calender_before2 <-"02 Jan 1995"
-calender_after2 <- "01 Jan 2004"
-
-#3
-subject3 <- c("Technology")
-country3 <- c("Austria/Germany", "Belgium/Germany", "Belgium/Germany/Netherlands", "Czech Republic/Germany/United Arab Emirates", "France/Germany", "France/Germany/Switzerland", "Germany", "Germany/Lithuania/Poland", "Germany/Luxembourg", "Germany/Netherlands", "Germany/Norway", "Germany/Poland", "Germany/Russia", "Germany/Sweden", "Germany/Switzerland", "Germany/United Kingdom")
 result_techno3 <- "techno09.xls"
-calender_before3 <-"02 Jan 2004"
-calender_after3 <- "01 Jan 2009"
-
-#4
-subject4 <- c("Technology")
-country4 <- c("Austria/Germany", "Belgium/Germany", "Belgium/Germany/Netherlands", "Czech Republic/Germany/United Arab Emirates", "France/Germany", "France/Germany/Switzerland", "Germany", "Germany/Lithuania/Poland", "Germany/Luxembourg", "Germany/Netherlands", "Germany/Norway", "Germany/Poland", "Germany/Russia", "Germany/Sweden", "Germany/Switzerland", "Germany/United Kingdom")
 result_techno4 <- "techno12.xls"
-calender_before4 <-"02 Jan 2004"
-calender_after4 <- "31 Dec 2012"
-
 # Path to data files
-path <- "/Users/dmetzler/Documents/_Projekte/_GCB/2013_Kongresskarten/gcbmaps/data/"
+path <- "/Users/metzler/Documents/_Projekte/_GCB/2013_Kongresskarten/gcbmaps/data/icaa/"
 
 # set options to prevent automatic factors
 options(stringsAsFactors = FALSE)
@@ -76,7 +50,7 @@ cities <- join(cities, eventno, by="city")
 
 #check geocoding
 qmap("Germany", zoom = 6)+
-  geom_point(data = cities, aes(x = lon, y = lat, colour = "red", size = number))
+  geom_point(data = cities, aes(x = lon, y = lat, size = number), colour = "red")
 
 
 #convert year into numeric
@@ -122,9 +96,29 @@ ggplot(nasa)+
 
 
 # setup bar chart - works
-ggplot(citiesn)+
-  geom_bar(aes(x = factor(yearc), y = number), stat = "identity")
+summary(citiesn)
 
+mm <- ddply(citiesn, "cyl", summarise, mmpg = mean(mpg))
+
+ggplot(citiesn, aes(x = factor(yearc), y = number))+
+  geom_bar(stat = "identity")
+
+    theme(
+    plot.background = element_blank()
+    ,panel.grid.major = element_blank()
+    ,panel.grid.minor = element_blank()
+    ,panel.border = element_blank()
+    ,panel.background = element_blank()
+    ,axis.title = element_blank()
+    ,axis.text.y = element_blank()
+    ,axis.ticks.y = element_blank()
+  ) 
+  
+ggsave(file = "barchart.svg", dpi = 600)
+
+?ggsave
+  #draws x and y axis line
+  theme(axis.line = element_line(color = 'black'))
 ggplot(citiesn)+
   geom_point(aes(x = factor(yearc), y = number))
 
