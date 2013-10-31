@@ -2,6 +2,8 @@
 ############### Data Processing for subplots ######################
 ###################################################################
 
+
+#Todo: add incomplete data
 library(xlsx)
 library(ggmap)
 library(plyr)
@@ -19,12 +21,13 @@ options(stringsAsFactors = FALSE)
 
 # Read in xls
 techno <- read.xlsx2(paste0(path, result_techno1), 1)
-
+techno <- rbind(techno, read.xlsx2(paste0(path, result_techno1), 2))
 # append the others
 for (i in c("04", "09", "12")){
   path2 <- paste0("techno", i)
   path2 <- paste0(path2, ".xls")
   techno2 <- read.xlsx2(paste0(path, path2), 1)  
+  techno2 <- rbind(techno2, read.xlsx2(paste0(path, path2), 2))
   techno <- rbind(techno, techno2)
 }
 
@@ -35,7 +38,7 @@ table(techno$city)
 cities <- unique(techno$city)
 
 #geocode (uncomment before use)
-#cities_geo <- geocode(cities)
+cities_geo <- geocode(cities)
 
 #merge city name and geocodes
 cities <- cbind(cities, cities_geo)
@@ -44,10 +47,12 @@ names(cities) <- c("city", "lon", "lat")
 
 
 #count events per city
-eventno <- ddply(techno, .(city), summarize, number=length(ename))
+eventno <- ddply(techno, .(city), summarize, numbertotal=length(ename))
 #join to cities
 cities.event <- join(cities, eventno, by="city")
-
+cities.event$id <- id(cities.event)
+  
+  
 #check geocoding
 # qmap("Germany", zoom = 6)+
 #   geom_point(data = cities, aes(x = lon, y = lat, size = number), colour = "red")
@@ -63,15 +68,23 @@ eventno.yearc <- ddply(techno, .(city, yearc), summarize, number = length(ename)
 
 #join to cities
 citiesn <- join(cities.event, eventno.yearc, by="city")
-citiesn <- citiesn[, c(-4,-5, -6, -7, -8, -9)]
+#citiesn <- citiesn[, c(-4,-5, -6, -7, -8, -9)]
 citiesn.m <- melt(citiesn, measure.vars = "number")
 
 # setup bar chart
-head(citiesn.m)
+tail(citiesn.m, 10)
 
-for i in (1:10)
-ggplot(citiesnm, aes(x = factor(yearc), y = number))+
+#remove empty cells
+citiesn.m <- citiesn.m[!citiesn.m$city == "",]
+citiesn.m <- citiesn.m[!is.na(citiesn.m$lon), ]
+
+
+
+for (i in citiesn.m$city) {
+ggplot(citiesn.m[citiesn.m$city == i,], aes(x = factor(yearc), y = value))+
   geom_bar(stat = "identity")+
+  scale_y_continuous(limits=c(0,225))+
+  scale_x_discrete(limits = c("1", "2", "3", "4"))+
     theme(
     plot.background = element_blank()
     ,panel.grid.major = element_blank()
@@ -81,15 +94,13 @@ ggplot(citiesnm, aes(x = factor(yearc), y = number))+
     ,axis.title = element_blank()
     ,axis.text.y = element_blank()
     ,axis.ticks.y = element_blank()
+    ,axis.text.x = element_blank()
+    ,axis.ticks.x = element_blank()
   ) 
-ggsave(file = "barchart.svg", dpi = 600)
+file <- paste0("pix/", citiesn.m[citiesn.m$city == i, "id"][1],".svg")
+ggsave(file = file)
+}
 
-?ggsave
-  #draws x and y axis line
-  theme(axis.line = element_line(color = 'black'))
-ggplot(citiesn)+
-  geom_point(aes(x = factor(yearc), y = number))
-
-
-
+test <- unique(citiesn.m$city)
+test[order(test)]
 
