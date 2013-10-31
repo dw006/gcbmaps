@@ -60,7 +60,7 @@ p <- ggplot(data = geodata) +
     geom_polygon(aes(fill = bipc)) +
     geom_path(color = "white", size = 0.25) +
     ##Add point layer
-    geom_point(data = cities.event, aes(x = lon, y = lat, size = number, group = lon))+
+    geom_point(data = cities.event, aes(x = lon, y = lat, size = numbertotal, group = lon))+
     coord_equal() +
     scale_fill_brewer("BIP/Einwohner (2010)", palette = "PiYG")+
     coord_map(project = "lambert", lat0 = 0, lon0 = 16.5, ylim = c(44, 58), xlim = c(2, 20))+
