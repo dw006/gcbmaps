@@ -3,7 +3,6 @@
 ###################################################################
 
 
-#Todo: add incomplete data
 library(xlsx)
 library(ggmap)
 library(plyr)
