@@ -59,8 +59,8 @@ p <- ggplot(data = geodata) +
     aes(x = long, y = lat,  group = group) + 
     geom_polygon(aes(fill = bipc)) +
     geom_path(color = "white", size = 0.25) +
-    ##Add point layer
-    geom_point(data = cities.event, aes(x = lon, y = lat, size = numbertotal, group = lon))+
+    ##Add point layer, displaying circles not dots via shape = 1
+    geom_point(data = cities.event, aes(x = lon, y = lat, size = numbertotal, group = lon), shape = 1)+
     coord_equal() +
     scale_fill_brewer("BIP/Einwohner (2010)", palette = "PiYG")+
     coord_map(project = "lambert", lat0 = 0, lon0 = 16.5, ylim = c(44, 58), xlim = c(2, 20))+
