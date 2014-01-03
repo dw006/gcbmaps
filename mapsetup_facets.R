@@ -61,7 +61,7 @@ p <- ggplot() +
     ##Add point layer, displaying circles not dots via shape = 1
     geom_point(data = citiesn, aes(x = lon, y = lat, size = number, group = lon), shape = 1)+
     coord_equal() +
-    scale_fill_brewer("BIP/Einwohner (2010)", palette = "PiYG")+
+    scale_fill_brewer("BIP/Einwohner (Dynamik)", palette = "PiYG")+
     coord_map(project = "lambert", lat0 = 0, lon0 = 16.5, ylim = c(44, 58), xlim = c(2, 20))+
     scale_x_continuous(name = "", breaks = NULL)+
     scale_y_continuous(name = "", breaks = NULL)+
@@ -71,5 +71,5 @@ p <- ggplot() +
 p
   
 #save
-ggsave(file = "bibkarte.svg", dpi = 600)
+ggsave(file = "bibkarte_medical.svg", dpi = 600)
 

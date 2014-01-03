@@ -10,10 +10,10 @@ library(car)
 
 
 #data files
-result_techno1 <- "techno95.xls"
-result_techno2 <- "techno04.xls"
-result_techno3 <- "techno09.xls"
-result_techno4 <- "techno12.xls"
+result_techno1 <- "industry07.xls"
+result_techno2 <- "industry12.xls"
+result_techno3 <- "industry99.xls"
+
 # Path to data files
 path <- "/Users/metzler/Documents/_Projekte/_GCB/2013_Kongresskarten/gcbmaps/data/icaa/"
 
@@ -24,8 +24,8 @@ options(stringsAsFactors = FALSE)
 techno <- read.xlsx2(paste0(path, result_techno1), 1)
 techno <- rbind(techno, read.xlsx2(paste0(path, result_techno1), 2))
 # append the others
-for (i in c("04", "09", "12")){
-  path2 <- paste0("techno", i)
+for (i in c("99", "07", "12")){
+  path2 <- paste0("industry", i)
   path2 <- paste0(path2, ".xls")
   techno2 <- read.xlsx2(paste0(path, path2), 1)  
   techno2 <- rbind(techno2, read.xlsx2(paste0(path, path2), 2))
@@ -33,6 +33,8 @@ for (i in c("04", "09", "12")){
 }
 
 head(techno)
+table(techno$year)
+
 table(techno$city)
 
 #which cities?
