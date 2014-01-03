@@ -47,8 +47,15 @@ names(cities) <- c("city", "lon", "lat")
 
 #count events per city
 eventno <- ddply(techno, .(city), summarize, numbertotal=length(ename))
-#join to cities
-cities.event <- join(cities, eventno, by="city")
+
+#only for the n-biggest event locations
+n <- 15
+eventno.n <- eventno[order(eventno$numbertotal, decreasing = TRUE)[1:n],]
+
+
+
+#join to cities 
+cities.event <- join(eventno.n, cities, by="city")
 cities.event$id <- id(cities.event)
   
   
