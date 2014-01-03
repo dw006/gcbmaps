@@ -55,9 +55,11 @@ eventno.n <- eventno[order(eventno$numbertotal, decreasing = TRUE)[1:n],]
 
 
 #join to cities 
-cities.event <- join(eventno.n, cities, by="city")
+cities.event <- join(cities, eventno, by="city")
 cities.event$id <- id(cities.event)
-  
+
+#subset to the n-biggest event locations
+cities.eventn <- cities.event[cities.event$city %in% eventno.n$city,]
   
 #check geocoding
 # qmap("Germany", zoom = 6)+
@@ -73,7 +75,11 @@ techno$year <- as.numeric(techno$year)
 eventno.yearc <- ddply(techno, .(city, yearc), summarize, number = length(ename))
 
 #join to cities
-citiesn <- join(cities.event, eventno.yearc, by="city")
+citiesn <- join(cities.eventn, eventno.yearc, by="city")
+
+
+
+
 #citiesn <- citiesn[, c(-4,-5, -6, -7, -8, -9)]
 citiesn.m <- melt(citiesn, measure.vars = "number")
 
@@ -84,6 +90,7 @@ tail(citiesn.m, 10)
 citiesn.m <- citiesn.m[!citiesn.m$city == "",]
 citiesn.m <- citiesn.m[!is.na(citiesn.m$lon), ]
 
+ 
 
 
 for (i in citiesn.m$city) {
@@ -103,10 +110,9 @@ ggplot(citiesn.m[citiesn.m$city == i,], aes(x = factor(yearc), y = value))+
     ,axis.text.x = element_blank()
     ,axis.ticks.x = element_blank()
   ) 
-file <- paste0("pix/", citiesn.m[citiesn.m$city == i, "id"][1],".svg")
+file <- paste0("pixtecno/", citiesn.m[citiesn.m$city == i, "id"][1],".svg")
 ggsave(file = file)
 }
 
-test <- unique(citiesn.m$city)
-test[order(test)]
+
 

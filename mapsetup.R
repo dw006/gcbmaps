@@ -66,7 +66,9 @@ p <- ggplot(data = geodata) +
     coord_map(project = "lambert", lat0 = 0, lon0 = 16.5, ylim = c(44, 58), xlim = c(2, 20))+
     scale_x_continuous(name = "", breaks = NULL)+
     scale_y_continuous(name = "", breaks = NULL)+
-    theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank())
+    theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank())+
+    geom_text(data = cities.eventn, aes(x = lon, y = lat, label = id, group = city, size = 6))
+
 p
   
 #save
