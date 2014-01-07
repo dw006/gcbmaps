@@ -53,6 +53,10 @@ nuts2.df <- join(nuts2.points, nuts2@data, by = "id")
 # join the bibtable to shapetable
 geodata<-join(nuts2.df, bib.cast, by = "NUTS_ID")
 
+#remove Nas
+geodata <- na.omit(geodata)
+citiesn <- na.omit(citiesn)
+
 # wait and plot
 p <- ggplot() + 
     aes(x = long, y = lat,  group = group) + 
@@ -71,5 +75,5 @@ p <- ggplot() +
 p
   
 #save
-ggsave(file = "bibkarte_medical.svg", dpi = 600)
+ggsave(file = "bibkarte_industry.svg", dpi = 600)
 
