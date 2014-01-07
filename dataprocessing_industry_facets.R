@@ -68,5 +68,5 @@ eventno.yearc <- ddply(techno, .(city, yearc), summarize, number = length(ename)
 #join to cities
 citiesn <- join(cities.event, eventno.yearc, by="city")
 
-which.max(citiesn$lon)
+
 
