@@ -36,16 +36,14 @@ library(car)
 bib.cast$yearc = as.numeric(recode(bib.cast$variable, "'bipdyn1'=1; 'bipdyn2'=2; 'bipdyn3'=3;", as.factor.result=FALSE))
 
 #all other categories available via
-(bib.cast$bibc <- classIntervals(bib.cast$bip, n = 5, style = "jenks"))
+#(bib.cast$bibc <- classIntervals(bib.cast$bip, n = 5, style = "jenks"))
 
 
-bib.cast <- ddply(bib.cast, .(yearc), transform, bipc = factor(quantcut(value, q = seq(0, 1, by = 0.2),
+bib.cast <- ddply(bib.cast, .(yearc), transform, bipc = factor(quantcut(value, q = seq(0, 1, by = 1/3),
                                                                             dig.lab = 6,
-                                                                            labels=c("1a", "2a", "3a", "4a", "5a") 
+                                                                            labels=c("Bottom 33%", " ", "Top 33%") 
                                                                             )))
 
 
 
-summary(bib.cast)
-1-quantile(bib.cast$value, probs = seq(0,1, by = 0.2), na.rm = TRUE)
-?quantile
+
