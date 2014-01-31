@@ -5,7 +5,7 @@
 
 ##### Install necessary libraries
 ## we need the following libraries
-needlib <- c("ggplot2", "ggmap", "maptools", "rgdal", "gpclib", "plyr", "scales", "gtools", "sp", RColorBrewer)
+needlib <- c("ggplot2", "ggmap", "maptools", "rgdal", "gpclib", "plyr", "scales", "gtools", "sp", "RColorBrewer")
 
 ## which of those are installed?
 has   <- needlib %in% rownames(installed.packages())
@@ -99,7 +99,8 @@ p <- ggplot(data = citiesn) +
     facet_wrap(~yearcf, nrow = 1)
 p
 
-geodata
+head(geodata)
+table(geodata$nuts2)
 
 display.brewer.pal(7,"BrBG")
 #save

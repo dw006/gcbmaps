@@ -1,4 +1,4 @@
-###################################################################
+  ###################################################################
 ############### Data Processing for Choropleths####################
 ###################################################################
 
@@ -12,13 +12,35 @@ library(gtools)
 #get Data, here: BIP 
 options(stringsAsFactors = FALSE)
 bib <- getEurostatRCV(kod = "nama_r_e2gdp")
+ 
+bib[grep("DED", bib$geo), ]  
+#copy DE4 values to DE40  
+bib[bib$geo == "DE40", "value"] <- bib[bib$geo == "DE4", "value"]
 
+#copy DED4 (minimum) values to DED   
+#bib[bib$geo == "DED", "value"]  <- bib[bib$geo == "DED4", "value"]
+  
+#rename DED to DED0  
+bib[bib$geo == "DED", "geo"] <- "DED0"
+
+  
 # remove Nuts0, 1, and 3
 bib <- bib[nchar(bib$geo)==4,]
 
+
+#rename DE40 to DE4
+bib[bib$geo =="DE40", "geo"] <- "DE4"
+
+#rename to DED0 to DED
+bib[bib$geo =="DED0", "geo"] <- "DED"
+  
+
+  
 #remove non-german nuts
 bib <- bib[grep("DE", bib$geo),]
 
+bib[bib$geo == "DED", ]  
+  
 bib.cast <- cast(bib, geo ~ time , mean, subset= unit == "EUR_HAB")
 
 # Percent increase in BIP between 1995 and 2010
@@ -43,6 +65,7 @@ bib.cast <- ddply(bib.cast, .(yearc), transform, bipc = factor(quantcut(value, q
                                                                             dig.lab = 6,
                                                                             labels=c("Bottom 33%", " ", "Top 33%") 
                                                                             )))
+
 
 
 

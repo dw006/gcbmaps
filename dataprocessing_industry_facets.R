@@ -15,7 +15,7 @@ result_techno2 <- "industry12.xls"
 result_techno3 <- "industry99.xls"
 
 # Path to data files
-path <- "/Users/metzler/Documents/_Projekte/_GCB/2013_Kongresskarten/gcbmaps/data/icaa/"
+path <- "/Users/metzler/Documents/_Projekte/_GCB/2013_Kongresskarten/gcbmaps/data/icaa_korrigiert/"
 
 # set options to prevent automatic factors
 options(stringsAsFactors = FALSE)
@@ -69,4 +69,4 @@ eventno.yearc <- ddply(techno, .(city, yearc), summarize, number = length(ename)
 citiesn <- join(cities.event, eventno.yearc, by="city")
 
 
-
+table(nuts2$nuts2)
